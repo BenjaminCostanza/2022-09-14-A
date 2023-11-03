@@ -1,9 +1,13 @@
 package it.polito.tdp.itunes.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Artist {
 	
 	private Integer artistId;
 	private String name;
+	
 	
 	public Artist(Integer artistId, String name) {
 		super();
@@ -23,6 +27,8 @@ public class Artist {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	
 
 	@Override
 	public int hashCode() {

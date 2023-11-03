@@ -5,7 +5,11 @@
 package it.polito.tdp.itunes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+
+import it.polito.tdp.itunes.model.Album;
 import it.polito.tdp.itunes.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +38,7 @@ public class FXMLController {
     private Button btnSet; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbA1"
-    private ComboBox<?> cmbA1; // Value injected by FXMLLoader
+    private ComboBox<Album> cmbA1; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtDurata"
     private TextField txtDurata; // Value injected by FXMLLoader
@@ -48,15 +52,76 @@ public class FXMLController {
     @FXML
     void doComponente(ActionEvent event) {
     	
+    	Album a1 = cmbA1.getValue();
+    	if(a1==null) {
+    		txtResult.appendText("Seleziona un album!+\n");
+    	}
+    	Set<Album> connessa = model.getComponenteConnessa(a1);
+    	
+    	double somma = 0.0;
+    	for(Album a: connessa) {
+    		somma += a.getDurata();
+    	}
+    	txtResult.appendText("Dimensione componente: " + connessa.size() + "\n") ;
+    	txtResult.appendText("Durata totale:" + somma + "\n");
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
+    	String s = txtDurata.getText();
+    	
+    	if(s==""){
+    			txtResult.appendText("Si deve obbligatoriamente inserire una durata! \n");
+    	}
+    	
+    	int n = 0;
+    	
+    	try {
+        	n = Integer.parseInt(txtDurata.getText());
+        	}
+        	catch(NumberFormatException e) {
+        		txtResult.appendText("Inserire una durata! \n");
+        		return;
+        	}
+    	
+    	this.model.createGraph(n);
+    	
+    	List<Album> albums = this.model.getAlbums();
+    	cmbA1.getItems().clear();
+    	cmbA1.getItems().addAll(albums);
+    	txtResult.appendText("#Vertici: " + this.model.getNVertici() + "\n");
+    	txtResult.appendText("#Archi: " + this.model.getNArchi() + "\n");
     	
     }
 
     @FXML
     void doEstraiSet(ActionEvent event) {
+    	
+    	Album a1 = cmbA1.getValue();
+    	if(a1==null) {
+    		txtResult.appendText("Seleziona un album!\n");
+    		return;
+    	}
+    	
+    	String dTotS = txtX.getText();
+    	if(dTotS.equals("")) {
+    		txtResult.appendText("Specificare durata totale! \n");
+    		return;
+    	}
+    	double dTot;
+    	try {
+    		dTot = Double.parseDouble(dTotS);
+    	}catch(NumberFormatException e ) {
+    		txtResult.appendText("Formato numero dTOT errato! \n");
+    		return;
+    	}
+    	
+    	
+    	Set<Album> ottimi = model.ricercaSetMassimo(a1, dTot);
+    	
+    	txtResult.appendText(ottimi + "\n");
 
     }
 

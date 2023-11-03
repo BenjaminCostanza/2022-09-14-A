@@ -1,9 +1,12 @@
 package it.polito.tdp.itunes.model;
 
+import java.util.List;
+
 public class Album implements Comparable<Album>{
 	private Integer albumId;
 	private String title;
 	private Double durata;
+	private List<Track> listaCanzoni;
 	
 	public Album(Integer albumId, String title, Double durata) {
 		super();
@@ -11,6 +14,14 @@ public class Album implements Comparable<Album>{
 		this.title = title;
 		this.durata = durata;
 	}
+	
+	public Album(Integer albumId, String title) {
+		super();
+		this.albumId = albumId;
+		this.title = title;
+	}
+
+
 
 	public Integer getAlbumId() {
 		return albumId;
@@ -34,6 +45,10 @@ public class Album implements Comparable<Album>{
 
 	public void setDurata(Double durata) {
 		this.durata = durata;
+	}
+	
+	public void setListaCanzoni(List<Track> listaCanzoni) {
+		this.listaCanzoni = listaCanzoni;
 	}
 
 	@Override
